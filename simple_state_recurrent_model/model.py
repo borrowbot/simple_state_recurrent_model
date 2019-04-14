@@ -34,8 +34,9 @@ class SimpleRecurrentModel(object):
             return -np.sum(output * sample_labels + (1 - output) * (1 - sample_labels))
         loss_grad = grad(loss)
 
+        train_inputs, train_labels = self.assemble_data(train_inputs, train_labels)
         for _ in range(steps):
-            sample = np.random.choice(np.arange(formatted_labels.shape[0]), batch_size)
+            sample = np.random.choice(np.arange(train_labels.shape[0]), batch_size)
             sample_inputs = train_inputs[sample]
             sample_labels = train_labels[sample]
             self.weights = self.weights - learning_rate * loss_grad(self.weights, sample_inputs, sample_labels)
@@ -91,7 +92,7 @@ class SimpleRecurrentModel(object):
             }, f)
 
 
-    def assemble_data(self, inputs, labels, output_markers=False):
+    def assemble_data(self, inputs, labels):
         assert len(inputs) == len(labels)
 
         formatted_inputs = []
@@ -107,10 +108,6 @@ class SimpleRecurrentModel(object):
                 formatted_inputs.append(np.concatenate((pre_padding, vector, post_padding, [last_label, 1])))
                 last_label = any([j >= interval[0] and j < interval[1] for interval in labels[i]])
                 formatted_labels.append(int(last_label))
-
-                if output_markers:
-                    print(inputs[i][max(0, start_idx):end_idx])
-                    print(int(last_label))
 
         return np.array(formatted_inputs), np.array(formatted_labels)
 
