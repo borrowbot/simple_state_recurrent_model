@@ -6,7 +6,7 @@ import os
 import json
 
 
-DEFAULT_ALPHABET = string.printable[:95] + '€£'
+DEFAULT_ALPHABET = string.printable
 
 
 def load_saved_model(model_path):
@@ -20,12 +20,12 @@ def load_saved_model(model_path):
 
 
 class SimpleRecurrentModel(object):
-    def __init__(self, window_size, alphabet=DEFAULT_ALPHABET, window_shift=0):
+    def __init__(self, window_size, alphabet, window_shift=0):
         self.num_chars = len(alphabet)
         self.window_size = window_size
         self.alphabet = alphabet
         self.window_shift = window_shift
-        self.weights = np.random.normal(1, size=(self.num_chars * self.window_size + 2))
+        self.weights = np.zeros(shape=(self.num_chars * self.window_size + 2), dtype='float32')
 
 
     def train(self, train_inputs, train_labels, batch_size, learning_rate, steps):
