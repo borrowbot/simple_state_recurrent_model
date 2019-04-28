@@ -65,8 +65,8 @@ class SimpleRecurrentModel(object):
             self.weights = self.weights - learning_rate * loss_grad(self.weights, sample_inputs, sample_labels)
 
     def compute_inference(self, input_str):
-        """ Returns the result of the model's inference on an input string. Returns a 1D np.array of floats with the
-            same length as the original input string. Values in this array are between 0 and 1.
+        """ Returns the result of the model's inference on an input string. Returns a list floats with the same length
+            as the original input string. Values in this array are between 0 and 1.
         """
         last_activation = 0
         results = []
