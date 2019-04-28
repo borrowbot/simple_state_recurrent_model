@@ -1,3 +1,4 @@
 autograd
 numpy
 pathos
+dill
