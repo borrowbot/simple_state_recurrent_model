@@ -5,6 +5,8 @@ Our model is simple, fast, interpretable, easy to train, and data-efficient. The
 
 This repository will also contain published, pre-trained models for general-purpose tasks which may be of interested to developers at large. As of now, I am only publishing models which can detect references to monetary amounts though models for other tasks are in development and should be published soon.
 
+This project is published under the permissive Apache Software License. 
+
 
 # Installation
 
