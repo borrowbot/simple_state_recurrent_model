@@ -1,13 +1,21 @@
 This project is a implementation of a ARMA(1, n)-style, linear, recurrent, auto-regressive model that I have recently written about on my blog. This model is able to extract parts of strings which represent simple semantic entities, such as references monetary values or dates:
 
-<p style="text-align: center">
-<font size=3; color="grey"; font-family="bookman">
-"Hey Angela, I just wanted to check the status of the $<font color=#a1e579>635</font> invoice from yesterday."
-</p>
-<p style="text-align: center">
-"The first <font color=#a1e579>200</font> was sent yesterday. I think the remaining $<font color=#a1e579>435</font> will be paid on 06/17/2019".
-</font>
-</p>
+<style
+  type="text/css">
+match {color:#a1e579;}
+unmatch {color:grey}
+</style>
+
+<unmatch>
+"Hey Angela, I just wanted to check the status of the $<match color=#a1e579>635</match> invoice from yesterday."
+</unmatch>
+
+<p>
+<p>
+
+<unmatch>
+"The first <match>200</match> was sent yesterday. I think the remaining $<match>435</match> will be paid on 06/17/2019".
+</unmatch>
 
 Our model is simple, fast, interpretable, easy to train, and data-efficient. The performance is good enough for many basic applications and serves as a good substitute for otherwise unwieldy and complex heuristic parsing rules.
 
