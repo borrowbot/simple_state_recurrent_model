@@ -59,3 +59,5 @@ For those only interested in making use of the packaged models, usage is incredi
 
 
 # Data Format
+
+<img src="https://raw.githubusercontent.com/borrowbot/simple_state_recurrent_model/master/readme_resources/model_diagram.png">
