@@ -1,6 +1,7 @@
 This project is a implementation of a ARMA(1, n)-style, linear, recurrent, auto-regressive model that I have recently written about on my blog. This model is able to extract parts of strings which represent simple semantic entities, such as references monetary values or dates:
 
 <img src="https://github.com/borrowbot/simple_state_recurrent_model/raw/master/readme_resources/example_inference.png">
+<!-- green color: #a1e579, grey color: #474747 -->
 
 Our model is simple, fast, interpretable, easy to train, and data-efficient. The performance is good enough for many basic applications and serves as a good substitute for otherwise unwieldy and complex heuristic parsing rules.
 
