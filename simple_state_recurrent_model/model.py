@@ -8,15 +8,26 @@ import dill
 from keras.utils import np_utils
 
 
-DEFAULT_ALPHABET = string.printable
-
-
 def load_saved_model(model_path):
+    """ Loads a SimpleRecurrentModel from a serialized file.
+    """
     with open(model_path, 'rb') as f:
         return dill.load(f)
 
 
 class SimpleRecurrentModel(object):
+    """ An implementation of a simple, lightweight ARMA(1, window_size) type logistic regression language model for
+        detecting references to simple semantic entities in text. A written description and example application of this
+        model can be found on our blog at (todo).
+
+    Args:
+        alphabet <str>: The list of characters recognized by the model. Characters in the data which are not in the
+            alphabet are encoded as a zero vector.
+        preprocess: A function mapping a string to a string which is applied to inputs (including training data) before
+            processing by the model.
+        window_size <int>: See (todo) for a thorough description of this parameter.
+        window_shift <int>: See (todo) for a thorough description of this parameter.
+    """
     def __init__(self, window_size, alphabet, window_shift=0, preprocess=id):
         self.num_chars = len(alphabet)
         self.window_size = window_size
@@ -26,6 +37,17 @@ class SimpleRecurrentModel(object):
         self.weights = np.zeros(shape=(self.num_chars * self.window_size + 2), dtype='float32')
 
     def train(self, train_inputs, train_labels, batch_size, learning_rate, steps):
+        """ Trains the model weights by using stochastic gradient descent to maximize the naive likelihood.
+
+        Args
+            train_inputs <list>: A list of input strings in their raw form i.e. before preprocessing and conversion into
+                input vectors.
+            train_labels <list>: A list identifying each occurance of a semantic entity for each string in
+                `train_inputs`. See (todo) for a description of the expected format of this parameter.
+            batch_size <int>: The size of the batch used in stochastic gradient descent.
+            learning_rate <float>: The step size multiplier used in stochastic gradient descent.
+            steps <int>: The number of training steps to take during the function's execution.
+        """
         train_inputs = [self.preprocess(i) for i in train_inputs]
         train_inputs, train_labels = self.assemble_data(train_inputs, train_labels)
         self._raw_train(train_inputs, train_labels, batch_size, learning_rate, steps)
@@ -43,13 +65,16 @@ class SimpleRecurrentModel(object):
             self.weights = self.weights - learning_rate * loss_grad(self.weights, sample_inputs, sample_labels)
 
     def compute_inference(self, input_str):
+        """ Returns the result of the model's inference on an input string. Returns a 1D np.array of floats with the
+            same length as the original input string. Values in this array are between 0 and 1.
+        """
         last_activation = 0
         results = []
-
+        vectorized_string = self._string_vectorizer(input_str)
         for j in range(len(input_str)):
             start_idx, end_idx = self._get_index_ranges(j)
             pre_padding, post_padding = self._get_padding(start_idx, end_idx, len(input_str))
-            vector = self._string_vectorizer(input_str[max(0, start_idx):end_idx])
+            vector = vectorized_string[max(0, start_idx):end_idx].flatten()
 
             last_activation = SimpleRecurrentModel._raw_inference(
                 self.weights,
@@ -71,6 +96,9 @@ class SimpleRecurrentModel(object):
         return pre_padding, post_padding
 
     def save(self, file_path):
+        """ Serializes the model represented by an instance of the SimpleRecurrentModel class into a file which can be
+            recovered using the `load_saved_model` function.
+        """
         with open(file_path, 'wb') as f:
             dill.dump(self, f)
 

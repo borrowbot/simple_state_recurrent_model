@@ -1,0 +1,1 @@
+from money_detection_model.utils import run_inference
