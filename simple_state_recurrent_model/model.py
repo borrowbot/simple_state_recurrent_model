@@ -28,7 +28,7 @@ class SimpleRecurrentModel(object):
         window_size <int>: See (todo) for a thorough description of this parameter.
         window_shift <int>: See (todo) for a thorough description of this parameter.
     """
-    def __init__(self, window_size, alphabet, window_shift=0, preprocess=id):
+    def __init__(self, window_size, alphabet, window_shift=0, preprocess=lambda x: x):
         self.num_chars = len(alphabet)
         self.window_size = window_size
         self.alphabet = {alphabet[i]: i for i in range(len(alphabet))}

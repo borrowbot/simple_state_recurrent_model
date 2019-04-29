@@ -9,6 +9,7 @@ class Evaluator(object):
         self.input_data = input_data
         self.target_data = target_data
 
+        self.data_preproc_model = SimpleRecurrentModel(**self.model_args)
         self.loo_cross_validation_results = None
         self.accuracy_curve_results = None
 
@@ -18,10 +19,11 @@ class Evaluator(object):
             model = SimpleRecurrentModel(**self.model_args)
             filtered_inputs = [self.input_data[i] for i in range(len(self.input_data)) if i != loo_cand]
             filtered_targets = [self.target_data[i] for i in range(len(self.target_data)) if i != loo_cand]
+            processed_inputs, processed_targets = model.assemble_data(filtered_inputs, filtered_targets)
 
             training_results = {}
             for s in range(1, steps + 1):
-                model.train(filtered_inputs, filtered_targets, batch_size, train_rate, epochs_per_step)
+                model._raw_train(processed_inputs, processed_targets, batch_size, train_rate, epochs_per_step)
                 training_results[s * epochs_per_step] = model.compute_inference(self.input_data[loo_cand])
             return training_results
 
@@ -49,7 +51,7 @@ class Evaluator(object):
                 d = []
                 for r in range(len(self.loo_cross_validation_results)):
                     model_pos = np.where(np.array(self.loo_cross_validation_results[k][r]) > thresh)[0]
-                    target_pos = [i for i in range(len(inputs[r])) if any([i >= j[0] and i < j[1] for j in labels[r]])]
+                    target_pos = [i for i in range(len(self.input_data[r])) if any([i >= j[0] and i < j[1] for j in self.target_data[r]])]
                     d.append(set(model_pos) == set(target_pos))
                 accuracy_curve[k].append(sum(d) / len(d))
 
