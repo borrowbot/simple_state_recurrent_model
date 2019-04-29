@@ -1,4 +1,4 @@
-This project is a implementation of a ARMA(1, n)-style, linear, recurrent, auto-regressive model that I have recently written about on my [blog](https://frankwang95.github.io/2019/04/simple_linear_recurrent_model). This model is able to extract parts of strings which represent simple semantic entities, such as references monetary values or dates:
+This project is an implementation of an ARMA(1, n)-style, linear, recurrent, auto-regressive model that I have recently written about on my [blog](https://frankwang95.github.io/2019/04/simple_linear_recurrent_model). This model is able to extract parts of strings which represent simple semantic entities, such as references to monetary values or dates:
 
 <img src="https://github.com/borrowbot/simple_state_recurrent_model/raw/master/readme_resources/example_inference.png">
 <!-- green color: #a1e579, grey color: #474747 -->
@@ -54,7 +54,7 @@ For those only interested in making use of the packaged models, usage is incredi
  0.9776328761143998]
 ```
 
-**A note on security:** For those working in sensitive environments, it is worth noting that loading serialized models involves picking and unpicking objects. This process can be made to execute arbitrary code if a malicious file is injected into the repository's storage for packaged models.
+**A note on security:** For those working in sensitive environments, it is worth noting that loading serialized models involves pickling and unpickling objects. This process can be made to execute arbitrary code if a malicious file is injected into the repository's storage for packaged models.
 
 
 # Training Custom Models

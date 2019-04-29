@@ -6,10 +6,9 @@ from simple_state_recurrent_model.model import SimpleRecurrentModel
 class Evaluator(object):
     def __init__(self, model_args, input_data, target_data):
         self.model_args = model_args
-        self.input_data = input_data
-        self.target_data = target_data
-
         self.data_preproc_model = SimpleRecurrentModel(**self.model_args)
+        self.input_data = [self.data_preproc_model.preprocess(i) for i in input_data]
+        self.target_data = target_data
         self.loo_cross_validation_results = None
         self.accuracy_curve_results = None
 

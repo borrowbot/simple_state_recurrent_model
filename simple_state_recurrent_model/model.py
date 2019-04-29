@@ -29,9 +29,10 @@ class SimpleRecurrentModel(object):
         window_shift <int>: See (todo) for a thorough description of this parameter.
     """
     def __init__(self, window_size, alphabet, window_shift=0, preprocess=lambda x: x):
-        self.num_chars = len(alphabet)
+        self.num_chars = len(alphabet) + 1
         self.window_size = window_size
-        self.alphabet = {alphabet[i]: i for i in range(len(alphabet))}
+        self.alphabet = {alphabet[i]: i + 1 for i in range(len(alphabet))}
+        self.alphabet_map = lambda x: self.alphabet.get(x, 0)
         self.window_shift = window_shift
         self.preprocess = preprocess
         self.weights = np.zeros(shape=(self.num_chars * self.window_size + 2), dtype='float32')
@@ -85,14 +86,15 @@ class SimpleRecurrentModel(object):
         return results
 
     def _string_vectorizer(self, string):
-        return np_utils.to_categorical(list(map(self.alphabet.get, string)), len(self.alphabet))
+        index_vectors = list(map(self.alphabet.get, string))
+        return np_utils.to_categorical(index_vectors, self.num_chars)
 
     def _get_index_ranges(self, inference_index):
         return inference_index - self.window_shift, inference_index + self.window_size - self.window_shift
 
     def _get_padding(self, start_idx, end_idx, len_input_str):
-        pre_padding = np.zeros(-min(0, start_idx) * len(self.alphabet))
-        post_padding = np.zeros(max(0, end_idx - len_input_str) * len(self.alphabet))
+        pre_padding = np.zeros(-min(0, start_idx) * self.num_chars)
+        post_padding = np.zeros(max(0, end_idx - len_input_str) * self.num_chars)
         return pre_padding, post_padding
 
     def save(self, file_path):
