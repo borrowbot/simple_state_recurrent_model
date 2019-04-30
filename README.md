@@ -35,7 +35,6 @@ For those only interested in making use of the packaged models, usage is incredi
 ```python
 >>> from money_detection_model import run_inference
 >>> run_inference("test string $500")
-
 [0.00010524255918530615,
  0.000116869978677247,
  0.0004632890110024569,
@@ -87,7 +86,7 @@ Given data in this form, training the model might look something like this:
 >>> preprocess_fn = lambda x: x.lower()
 >>>
 >>> model = SimpleRecurrentModel(alphabet=alphabet, window_size=5, preprocess=preprocess_fn)
->>> model.train(input_data, label_data, 1, 0.1, 10)
+>>> model.train(input_data, label_data, batch_size=32, learning_rate=0.1, epochs=10)
 ```
 
 The `alphabet` parameter expresses the set of characters which the model will recognize. Characters not found in `alphabet`, are lumped together by the model and represented by an encoded 'unknown character'. The `preprocess` parameter allows you to pass in a `str -> str` function which is applied to all inputs in both training and inference. Finally, the `window_size` `window_shift` parameters allow you to control the size and position of the window of characters used in each character-level prediction.
