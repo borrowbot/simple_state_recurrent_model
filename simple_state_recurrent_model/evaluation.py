@@ -37,7 +37,6 @@ class Evaluator(object):
         self.loo_cross_validation_results = processed_results
         return self.loo_cross_validation_results
 
-
     def compute_accuracy_curve(self, resolution):
         if self.loo_cross_validation_results is None:
             raise Exception("loo_cross_validation results not yet computed")
@@ -48,7 +47,7 @@ class Evaluator(object):
             for i in range(resolution + 1):
                 thresh = i / float(resolution)
                 d = []
-                for r in range(len(self.loo_cross_validation_results)):
+                for r in range(len(self.loo_cross_validation_results[k])):
                     model_pos = np.where(np.array(self.loo_cross_validation_results[k][r]) > thresh)[0]
                     target_pos = [i for i in range(len(self.input_data[r])) if any([i >= j[0] and i < j[1] for j in self.target_data[r]])]
                     d.append(set(model_pos) == set(target_pos))
