@@ -71,10 +71,10 @@ class SimpleRecurrentModel(object):
         """
         last_activation = 0
         results = []
-        vectorized_string = self._string_vectorizer(input_str)
-        for j in range(len(input_str)):
+        vectorized_string = self._string_vectorizer(filtered_input_str)
+        for j in range(len(filtered_input_str)):
             start_idx, end_idx = self._get_index_ranges(j)
-            pre_padding, post_padding = self._get_padding(start_idx, end_idx, len(input_str))
+            pre_padding, post_padding = self._get_padding(start_idx, end_idx, len(filtered_input_str))
             vector = vectorized_string[max(0, start_idx):end_idx].flatten()
 
             last_activation = SimpleRecurrentModel._raw_inference(
