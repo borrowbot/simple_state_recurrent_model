@@ -71,6 +71,7 @@ class SimpleRecurrentModel(object):
         """
         last_activation = 0
         results = []
+        filtered_input_str = self.preprocess(input_str)
         vectorized_string = self._string_vectorizer(filtered_input_str)
         for j in range(len(filtered_input_str)):
             start_idx, end_idx = self._get_index_ranges(j)
